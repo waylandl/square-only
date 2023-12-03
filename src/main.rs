@@ -1,17 +1,19 @@
-use std::io;
+use std::io::{self, Write};
 
 fn main() {
-    println!("Enter the size of the square matrix:");
+    println!("Enter the size of the vectors:");
     
     let mut size = String::new();
     io::stdin().read_line(&mut size).expect("Failed to read line");
     let size: usize = size.trim().parse().expect("Invalid size");
+    let size_flat = size * size;
+    let mut matrix_flat = vec![0; size_flat];
 
-    let mut matrix: Vec<Vec<i32>> = vec![vec![0; size]; size];
-
-    println!("Enter {} entries separated by whitespace per {} rows separated by newline:", size, size);
+    println!("Enter {} vectors :", size);
     
     for i in 0..size {
+        print!("Vector {}:   ", i + 1);
+        io::stdout().flush().expect("Failed to flush");
         let mut input = String::new();
         io::stdin().read_line(&mut input).expect("Failed to read line");
         let numbers: Vec<i32> = input
@@ -24,14 +26,19 @@ fn main() {
             return;
         }
 
-        matrix[i] = numbers;
+        let start_index: usize = i*size;
+        let end_index: usize = start_index + size;
+        let numbers_iter = numbers.into_iter();
+        matrix_flat.splice(start_index..end_index,numbers_iter);
+
     }
 
-    println!("Matrix:");
 
-    for row in matrix {
-        for num in row {
-            print!("{} ", num);
+
+    for row in 0..size {
+        for col in 0..size {
+            let index = col * size + row;
+            print!("{} ", matrix_flat[index]);
         }
         println!();
     }
