@@ -1,8 +1,6 @@
 use std::io::{self, Write};
 
-struct TwoBTwo {
-    data: [f64;4],
-}
+
 fn two_b_two_determinant(data:&[f64;4])
 -> f64 {
     let a = data[0];
@@ -16,13 +14,18 @@ fn two_b_two_determinant(data:&[f64;4])
 fn remove_r_c(row: usize, col: usize, data: &Vec<f64>) 
 -> Vec<f64>{
     let size = (data.len() as f64 ).sqrt() as usize; 
+    assert!(row <= size);
+    assert!(col <= size);
+    let mut row  = row;
+    if size == row { row = 0;}
     let col_end = size * col + 1;
     let col_start = col_end - size;
+
     let filtered_data: Vec<f64> = data
         .iter()
         .enumerate()
-        .filter(|&(index,&value)|{
-            (index + 1) % size != row || !(col_start..col_end).contains(&(index + 1))
+        .filter(|&(index,_)|{
+            !((col_start..col_end).contains(&(index + 1)) ||  (index + 1) % size == row )
         })
         .map(|(_, &value)| value)
         .collect();
@@ -67,7 +70,7 @@ fn main() {
     }
 
 
-    let matrix_flat2 = remove_r_c(2, 2, &matrix_flat);
+    let matrix_flat2 = remove_r_c(1, 1, &matrix_flat);
 
     for row in 0..(size-1) {
         for col in 0..(size-1) {
