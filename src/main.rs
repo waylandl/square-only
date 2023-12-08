@@ -34,7 +34,19 @@ fn remove_r_c(row: usize, col: usize, data: &Vec<f64>)
 }
 fn determinant(data: &[f64])
 -> f64 {
+    let size = (data.len() as f64 ).sqrt() as usize;
+    let mut cofactors:Vec<f64> = Vec::with_capacity(size);
+
+    for i in 0..size {
+        //find determinant at each element
+        if new_size = 4 {
+            //
+            two_b_two_determinant(new_data)
+        }
+        return 0.0
+    }
     0.0
+
 }
 fn main() {
     println!("Enter the size of the vectors:");
