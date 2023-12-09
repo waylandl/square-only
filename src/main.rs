@@ -1,8 +1,9 @@
 use std::io::{self, Write};
 
 
-fn two_b_two_determinant(data:&[f64;4])
+fn two_b_two_determinant(data:&Vec<f64>)
 -> f64 {
+    assert!(data.len() == 4);
     let a = data[0];
     let c = data[1];
     let b = data[2];
@@ -32,20 +33,26 @@ fn remove_r_c(row: usize, col: usize, data: &Vec<f64>)
    
     filtered_data
 }
-fn determinant(data: &[f64])
+fn determinant(data: Vec<f64>)
 -> f64 {
     let size = (data.len() as f64 ).sqrt() as usize;
     let mut cofactors:Vec<f64> = Vec::with_capacity(size);
 
     for i in 0..size {
         //find determinant at each element
-        if new_size = 4 {
+        let mut cofactor = data[i];
+        let new_data = remove_r_c(i, 1, &data);
+        let new_size = new_data.len();
+        if new_size == 4 {
             //
-            two_b_two_determinant(new_data)
+            cofactor = cofactor * f64::powi(-1.0,(i+1+1) as i32) *two_b_two_determinant(&new_data);
+        } else {
+            cofactor = cofactor * f64::powi(-1.0, (i + 1 + 1) as i32) * determinant(new_data);
         }
-        return 0.0
+        
+        cofactors.push(cofactor);
     }
-    0.0
+    cofactors.iter().sum()
 
 }
 fn main() {
