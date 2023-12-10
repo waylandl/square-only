@@ -41,13 +41,14 @@ fn determinant(data: Vec<f64>)
     for i in 0..size {
         //find determinant at each element
         let mut cofactor = data[i];
-        let new_data = remove_r_c(i, 1, &data);
+        let new_data = remove_r_c(i+1, 1, &data);
         let new_size = new_data.len();
         if new_size == 4 {
-            //
+
             cofactor = cofactor * f64::powi(-1.0,(i+1+1) as i32) *two_b_two_determinant(&new_data);
         } else {
             cofactor = cofactor * f64::powi(-1.0, (i + 1 + 1) as i32) * determinant(new_data);
+
         }
         
         cofactors.push(cofactor);
@@ -88,14 +89,15 @@ fn main() {
 
     }
 
+    let det = determinant(matrix_flat);
+    print!("det : {}", det);
+    //let matrix_flat2 = remove_r_c(1, 1, &matrix_flat);
 
-    let matrix_flat2 = remove_r_c(1, 1, &matrix_flat);
-
-    for row in 0..(size-1) {
-        for col in 0..(size-1) {
-            let index = col * (size-1) + row;
-            print!("{} ", matrix_flat2[index]);
-        }
-        println!();
-    }
+    //for row in 0..(size-1) {
+    //    for col in 0..(size-1) {
+    //        let index = col * (size-1) + row;
+    //        print!("{} ", matrix_flat2[index]);
+    //   }
+     //   println!();
+    //}
 }
