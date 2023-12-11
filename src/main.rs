@@ -33,7 +33,7 @@ fn remove_r_c(row: usize, col: usize, data: &Vec<f64>)
    
     filtered_data
 }
-fn determinant(data: Vec<f64>)
+fn determinant(data: &Vec<f64>)
 -> f64 {
     let size = (data.len() as f64 ).sqrt() as usize;
     let mut cofactors:Vec<f64> = Vec::with_capacity(size);
@@ -47,7 +47,7 @@ fn determinant(data: Vec<f64>)
 
             cofactor = cofactor * f64::powi(-1.0,(i+1+1) as i32) *two_b_two_determinant(&new_data);
         } else {
-            cofactor = cofactor * f64::powi(-1.0, (i + 1 + 1) as i32) * determinant(new_data);
+            cofactor = cofactor * f64::powi(-1.0, (i + 1 + 1) as i32) * determinant(&new_data);
 
         }
         
@@ -55,6 +55,31 @@ fn determinant(data: Vec<f64>)
     }
     cofactors.iter().sum()
 
+}
+
+fn inverse_matrix(data: Vec<f64>) 
+-> Vec<f64> {
+    let det = determinant(&data);
+    let size = (data.len() as f64).sqrt() as usize;
+    let mut cofactors:Vec<f64> = Vec::with_capacity(size);
+    let mut cofactors_transpose:Vec<f64> = Vec::with_capacity(size);
+
+    for i in 0..size {
+        for j in 0..size {
+            let new_data = remove_r_c(j, i, &data);
+            let new_det = determinant(&new_data);
+            cofactors.push(new_det);
+        }
+    }
+
+    for i in 0..size{
+        for j in 0..size{
+            let index = size * j + i;
+            cofactors_transpose.push(cofactors[index]);
+        }
+    }
+    
+    vec![0.0]
 }
 fn main() {
     println!("Enter the size of the vectors:");
