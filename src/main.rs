@@ -38,48 +38,60 @@ fn determinant(data: &Vec<f64>)
     let size = (data.len() as f64 ).sqrt() as usize;
     let mut cofactors:Vec<f64> = Vec::with_capacity(size);
 
-    for i in 0..size {
-        //find determinant at each element
-        let mut cofactor = data[i];
-        let new_data = remove_r_c(i+1, 1, &data);
-        let new_size = new_data.len();
-        if new_size == 4 {
+    if size == 2 {
+        two_b_two_determinant(data)
+    } else {
 
-            cofactor = cofactor * f64::powi(-1.0,(i+1+1) as i32) *two_b_two_determinant(&new_data);
-        } else {
-            cofactor = cofactor * f64::powi(-1.0, (i + 1 + 1) as i32) * determinant(&new_data);
+        for i in 0..size {
+            //find determinant at each element
+            let mut cofactor = data[i];
+            let new_data = remove_r_c(i+1, 1, &data);
+            let new_size = new_data.len();
+            if new_size == 4 {
 
+                cofactor = cofactor * f64::powi(-1.0,(i+1+1) as i32) *two_b_two_determinant(&new_data);
+            } else {
+                cofactor = cofactor * f64::powi(-1.0, (i + 1 + 1) as i32) * determinant(&new_data);
+
+            }
+            
+            cofactors.push(cofactor);
         }
-        
-        cofactors.push(cofactor);
-    }
-    cofactors.iter().sum()
+        cofactors.iter().sum()
+    }   
 
 }
 
-fn inverse_matrix(data: Vec<f64>) 
+fn inverse_matrix(data: &Vec<f64>) 
 -> Vec<f64> {
     let det = determinant(&data);
     let size = (data.len() as f64).sqrt() as usize;
     let mut cofactors:Vec<f64> = Vec::with_capacity(size);
     let mut cofactors_transpose:Vec<f64> = Vec::with_capacity(size);
 
-    for i in 0..size {
-        for j in 0..size {
-            let new_data = remove_r_c(j, i, &data);
-            let new_det = determinant(&new_data);
-            cofactors.push(new_det);
+    if size == 2 {
+        cofactors_transpose = vec![data[3], data[1], data[2], data [0]];
+    } else {
+        for i in 0..size {
+            for j in 0..size {
+                let new_data = remove_r_c(j+1, i+1, &data);
+                let new_det = determinant(&new_data);
+                cofactors.push(new_det);
+            }
+        }
+
+
+        for i in 0..size{
+            for j in 0..size{
+                let index = size * j + i;
+                cofactors_transpose.push(cofactors[index]);
+            }
         }
     }
 
-    for i in 0..size{
-        for j in 0..size{
-            let index = size * j + i;
-            cofactors_transpose.push(cofactors[index]);
-        }
-    }
+    let inverse:Vec<f64> = cofactors_transpose.into_iter().map( |x| x / det).collect();
     
-    vec![0.0]
+    inverse
 }
 fn main() {
     println!("Enter the size of the vectors:");
@@ -114,15 +126,17 @@ fn main() {
 
     }
 
-    let det = determinant(matrix_flat);
-    print!("det : {}", det);
-    //let matrix_flat2 = remove_r_c(1, 1, &matrix_flat);
+    let det = determinant(&matrix_flat);
+    println!("det : {}", det);
+    let inverse = inverse_matrix(&matrix_flat);
 
-    //for row in 0..(size-1) {
-    //    for col in 0..(size-1) {
-    //        let index = col * (size-1) + row;
-    //        print!("{} ", matrix_flat2[index]);
-    //   }
-     //   println!();
-    //}
+    println!("inverse:");    
+    for row in 0..(size) {
+        for col in 0..(size) {
+            let index = col * (size) + row;
+            print!(" {:.2} ", inverse[index]);
+       }
+
+        println!();
+    }
 }
