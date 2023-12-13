@@ -43,7 +43,7 @@ fn determinant(data: &Vec<f64>)
     } else {
 
         for i in 0..size {
-            //find determinant at each element
+
             let mut cofactor = data[i];
             let new_data = remove_r_c(i+1, 1, &data);
             let new_size = new_data.len();
@@ -126,6 +126,16 @@ fn main() {
 
     }
 
+    println!("matrix:"); 
+    for row in 0..(size) {
+        for col in 0..(size) {
+            let index = col * (size) + row;
+            print!(" {:.*} ", 2, if matrix_flat[index] == -0.0 { 0.0 } else { matrix_flat[index] });
+       }
+
+        println!();
+    }
+
     let det = determinant(&matrix_flat);
     println!("det : {}", det);
     let inverse = inverse_matrix(&matrix_flat);
@@ -134,7 +144,7 @@ fn main() {
     for row in 0..(size) {
         for col in 0..(size) {
             let index = col * (size) + row;
-            print!(" {:.2} ", inverse[index]);
+            print!(" {:.2} ", if inverse[index] == -0.0 { 0.0 } else {inverse[index]});
        }
 
         println!();
