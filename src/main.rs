@@ -149,4 +149,25 @@ fn main() {
 
         println!();
     }
+
+    let mut check_result:Vec<f64> = Vec::with_capacity(size_flat);
+    for i in 0..size {
+        for j in 0..size {
+            let index_a = i * size + j;
+            let index_b = j * size + i;
+            let ab = matrix_flat[index_a] * inverse[index_b];
+            check_result.push(ab);
+        }
+    }
+
+
+    println!("check:");    
+    for row in 0..(size) {
+        for col in 0..(size) {
+            let index = col * (size) + row;
+            print!(" {:.2} ", if check_result[index] == -0.0 { 0.0 } else {check_result[index]});
+       }
+
+        println!();
+    }
 }
