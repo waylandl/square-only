@@ -137,7 +137,12 @@ fn main() {
     }
 
     let det = determinant(&matrix_flat);
-    println!("det : {}", det);
+    print!("det : {}", det);
+    if det != 0.0 {
+        println!("  linearly independent");
+    } else {
+        println!("  linearly dependent");
+    }
     let inverse = inverse_matrix(&matrix_flat);
 
     println!("inverse:");    
@@ -170,4 +175,7 @@ fn main() {
 
         println!();
     }
+
+
+
 }
